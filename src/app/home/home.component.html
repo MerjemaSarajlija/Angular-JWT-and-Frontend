@@ -1,0 +1,147 @@
+﻿<div class="row" style="margin-top: 2%">
+    <div class="col-12 ">
+        <button class="btn btn-primary" style="float: right; background-color: #FD6F60; border-color: #FD6F60"
+            (click)="open(content)">Add Budget</button>
+    </div>
+    <div class="col-6 ">
+        <h4>Your budget</h4>
+    </div>
+</div>
+<table class="table table-striped table-dark" style="margin-top: 5%">
+    <thead style="text-align: center">
+        <tr>
+            <th scope="col">NAME</th>
+            <th scope="col">AMOUNT</th>
+            <th scope="col">DATE FROM</th>
+            <th scope="col">DATE TO</th>
+            <th scope="col">OPTIONS</th>
+        </tr>
+    </thead>
+    <tbody style="text-align: center" *ngFor="let el of budget">
+        <tr>
+            <td class="hidden-xs"> {{el.name}}</td>
+            <td>{{el.amount}}</td>
+            <td>{{el.date_from}}</td>
+            <td>{{el.date_to}}</td>
+            <td>
+                <div class="row">
+                    <div class="col-6 ">
+                        <button class="confirm-btn" (click)="openBudgetDetails(budgetDetailsModal, el.id)"> DETAILS
+                        </button>
+                    </div>
+                    <div class="col-6 ">
+                        <button class="confirm-btn" (click)=" openAddUser(el.id, addUserModal)">ADD USER</button>
+                    </div>
+                </div>
+            </td>
+
+    </tbody>
+</table>
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-body">
+        <h3>Add Budget</h3>
+        <form [formGroup]="budgetForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" formControlName="name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" formControlName="amount" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="dateFrom">Date from (Optional)</label>
+                <input type="date" formControlName="dateFrom" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="dateTo">Date to(Optional)</label>
+                <input type="date" formControlName="dateTo" class="form-control" />
+            </div>
+            <div class="row">
+                <div class="col-6 ">
+                    <button class="confirm-btn" data-dismiss="modal" (click)="addBudget()" (click)="c('save click')">ADD
+                        BUDGET</button>
+                </div>
+                <div class="col-6 ">
+                    <button class="confirm-btn grey-button" (click)="d('Cross click')">Cancel</button>
+                </div>
+            </div>
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+        </form>
+    </div>
+</ng-template>
+
+<style>
+    .confirm-btn {
+
+        background: #FD6F60 100% !important;
+        border-color: #FD6F60 100%;
+        border-radius: 1%;
+
+        width: 100%;
+
+        color: #ffff;
+        font-size: 16px;
+    }
+
+    .button-padd {
+        padding-top: 5%;
+        padding-right: 5%;
+        padding-left: 5%
+    }
+
+    .grey-button {
+
+        background: none !important;
+        color: black
+    }
+
+    .text-center {
+        font-size: 22px
+    }
+</style>
+
+<ng-template #budgetDetailsModal let-c="close" let-d="dismiss">
+    <div class="modal-body">
+        <div class="list-group" *ngIf="budgetDetailsArray != undefined">
+            <a class="list-group-item list-group-item-action active" style="background-color: #FD6F60">
+                <!--  <button style="float: right" (click)="open(content)">ADD USER</button>-->
+                Details of "{{budgetDetailsArray.name}}" budget
+            </a>
+            <a class="list-group-item ">AMOUNT: {{budgetDetailsArray.amount}}</a>
+            <a class="list-group-item ">DATE FROM: {{budgetDetailsArray.date_from}}</a>
+            <a class="list-group-item ">DATE TO: {{budgetDetailsArray.date_to}}</a>
+            <a class="list-group-item ">DATE CREATED: {{budgetDetailsArray.date_created}}</a>
+            <a class="list-group-item ">BUDGET USERS:
+                <a *ngFor="let e of budgetDetailsArray.budget_users">
+                    {{e.name}}
+                </a>
+            </a>
+            <button class="confirm-btn" (click)="d('Cross click')">Close</button>
+
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #addUserModal let-c="close" let-d="dismiss">
+    <div class="modal-body">
+        <form [formGroup]="userForm" (ngSubmit)="AddUser()">
+            <div class="form-group">
+                <label for="beneficary">ID of user</label>
+                <input type="text" formControlName="beneficary" class="form-control" />
+            </div>
+            <div class="row">
+                <div class="col-6 ">
+                    <button class="confirm-btn">OK</button>
+                </div>
+
+                <div class="col-6 ">
+                    <button class="confirm-btn grey-button " (click)="d('Cross click')">Cancel</button>
+                </div>
+            </div>
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+        </form>
+    </div>
+</ng-template>

@@ -1,0 +1,111 @@
+<div>
+  <div style="margin-top: 2%" class="row">
+    <div class="col-6 ">
+      <button class="confirm-btn"(click)="open(content)">ADD TRANSACTION</button>
+    </div>
+      <div class="col-6 ">
+        <button class="confirm-btn" routerLink="/chart">CHARTS</button>
+      </div>
+  </div>
+  <h4 class="col-6"  style="display: inline; " style="margin-top: 2%;">Your transactions</h4>
+
+</div>
+
+<table style="margin-top: 3%" class="table table-striped table-dark">
+  <thead>
+  <tr>
+    <th scope="col">DESCRIPTION</th>
+    <th scope="col">AMOUNT</th>
+    <th scope="col">DATE TIME</th>
+    <th scope="col">PERSON</th>
+    <th scope="col">BUDGET</th>
+    <th scope="col">TYPE</th>
+    <th scope="col">OPTIONS</th>
+
+
+  </tr>
+  </thead>
+  <tbody *ngFor="let el of transaction">
+  <tr>
+    <td class="hidden-xs"> {{el.description}}</td>
+    <td>{{el.amount}}</td>
+    <td>{{el.datetime}}</td>
+    <td>{{el.person}}</td>
+    <td>{{el.budget}}</td>
+    <td>{{el.type}}</td>
+    <td>
+      <button class="confirm-btn" (click)="opens(details,el.id)"> DETAILS </button>
+    </td>
+
+
+
+  </tbody>
+</table>
+
+<ng-template #content let-c="close" let-d="dismiss">
+
+  <div class="modal-body">
+    <form [formGroup]="budgetForm"   >
+      <mat-dialog-content>
+        <div class="form-group" >
+          <label for="amount">Amount</label>
+          <input type="number" formControlName="amount" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input type="text" formControlName="description" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="budget">Budget</label>
+          <select style="width: 100%; height: calc(1.5em + .75rem + 2px);"  class="form-control" formControlName="budget">
+            <option *ngFor="let el of budget"  [value]=el.id >
+              {{el.name}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="dateTime">Date from (Optional)</label>
+          <input type="date" formControlName="dateTime" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="type">Type (optional)</label>
+          <input type="text" formControlName="type" class="form-control"/>
+        </div>
+        <div class="row">
+          <div class="col-6 ">
+            <button type="submit" class="confirm-btn" (click)="addTransaction()" (click)="c('save click')">ADD</button>
+          </div>
+
+          <div class="col-6 ">
+            <button class="confirm-btn grey-button "   (click)="d('Cross click')">CANCEL</button>
+          </div>
+        </div>
+        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+      </mat-dialog-content>
+    </form>
+  </div>
+</ng-template>
+
+
+<ng-template #details let-c="close" let-d="dismiss">
+
+  <div class="modal-body">
+    <div class="list-group" *ngIf="det != undefined">
+      <a  class="list-group-item list-group-item-action active" style="background-color: #FD6F60">
+        Details of  budget
+      </a>
+      <a class="list-group-item ">AMOUNT: {{det.amount}}</a>
+      <a class="list-group-item ">DESCRIPTION: {{det.description}}</a>
+      <a class="list-group-item ">DATE TIME: {{det.datetime}}</a>
+      <a class="list-group-item ">BUDGET: {{det.budget}}</a>
+      <a class="list-group-item ">TYPE: {{det.type}}</a>
+
+
+    </div>
+    <button class="confirm-btn "   (click)="d('Cross click')">CANCEL</button>
+
+
+
+  </div>
+</ng-template>
+
